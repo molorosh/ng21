@@ -42,3 +42,14 @@ To make this work I had to make a few changes in the angular.json config file:
 
 _TODO: replace this manual stuff with some GitHub actions at some point..._
 
+## style and branding
+###favicon
+- generated at: https://favicon.io/favicon-generator/
+- option: text
+- text: "21"
+- style: 
+  - shape: rounded
+  - font: Langar
+  - size: 110
+  - background: #8800Ff
+  - foreground: #ffffff
