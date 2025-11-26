@@ -43,7 +43,7 @@ To make this work I had to make a few changes in the angular.json config file:
 _TODO: replace this manual stuff with some GitHub actions at some point..._
 
 ## style and branding
-###favicon
+### favicon
 - generated at: https://favicon.io/favicon-generator/
 - option: text
 - text: "21"
