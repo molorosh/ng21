@@ -20,7 +20,10 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "../docs/dist/ng21",
+            "outputPath": {
+              "base": "../docs",
+              "browser": ""
+            },
             "baseHref": "/ng21/",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
