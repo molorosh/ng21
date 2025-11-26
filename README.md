@@ -17,7 +17,28 @@ npx -p @angular/cli@9.1 ng new ng-twenty-one
 ```shell
 ng build
 ```
-this will create a build in ng21\ng-twenty-one\dist\ng-twenty-one\browser
+- this will create a build in ng21\docs
+- and this can be pushed up to the repo
+
+To make this work I had to make a few changes in the angular.json config file:
+- inside this part of the config:
+```json
+"architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+```
+- I added the following extra stuff:
+```json
+"outputPath": {
+    "base": "../docs",
+    "browser": ""
+},
+"baseHref": "/ng21/",
+```
+- an outputPath setting of "../docs" would result in the index.html page being in the folder .../docs/browser so we use the extended setup to ensure that there is no /browser/ folder.
+- so the baseHref of /ng21/ is because the build assumes the angular website will be hosted at the root of the website, but GitHub pages are hosted at https://molorosh.github.io/ng21/ so this corrects the setup to account for being in a sub-folder of the website.
 
 
+_TODO: replace this manual stuff with some GitHub actions at some point..._
 
