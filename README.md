@@ -13,3 +13,11 @@ npx -p @angular/cli@9.1 ng new ng-twenty-one
 - then I answered the standard installation questions about CSS and Server-Side rendering
 - and then the project was created
 ### git-hub self-hosting 
+- in the ng-twenty-one folder run the command:
+```shell
+ng build
+```
+this will create a build in ng21\ng-twenty-one\dist\ng-twenty-one\browser
+
+
+
