@@ -1,0 +1,27 @@
+<div class="main-layout">
+
+    <div class="primary-section">
+
+        <div class="app-title-section">
+            <h1>{{ appTitle() }}</h1>
+        </div>
+
+        <div class="navbar">
+            [ 
+            <a routerLink="/">Home</a> |
+            <a routerLink="/about">About This App</a> 
+            ]
+        </div>
+
+        <div class="app-content-section">
+            <router-outlet></router-outlet>
+        </div>
+
+    </div>
+
+    <div class="secondary-section">
+        <p>less important stuff will go here</p>
+        <p>including some logging / diagnostic stuff</p>
+    </div>
+
+</div>

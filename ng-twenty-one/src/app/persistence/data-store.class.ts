@@ -41,7 +41,7 @@ class DataStore {
             delete (groupA as any).pk; // ensure pk is undefined so that autoIncrement works
             
             let addRequest: IDBRequest<IDBValidKey> = taskGroupStore.add(groupA);
-           addRequest.onsuccess = (addEvent: Event) => {
+            addRequest.onsuccess = (addEvent: Event) => {
                 console.log("groupA  already has generated pk property:", groupA);
                 console.log("Added initial task group, addEvent:", addEvent);
                 console.log("Generated pk:", addRequest.result);
@@ -56,17 +56,6 @@ class DataStore {
                     console.log("Generated pk for task:", addTaskRequest.result);
                 }
             }
-/*
-            let groupB: DbTaskGroup = new DbTaskGroup();
-            groupB.title = "Group B";
-            groupB.pk = null; // will be auto-generated
-            let addRequestB: IDBRequest<IDBValidKey> = taskGroupStore.add(groupB);
-            addRequestB.onsuccess = (addEvent: Event) => {
-                console.log("Added initial task group, addEvent:", addEvent);
-                console.log("Generated id:", addRequestB.result);
-                //groupB.pk = addRequestB.result as number;
-                console.log("Updated groupB with generated pk:", groupB);
-            }*/
         }
         request.onsuccess = (event: Event) => {
             console.log('DataStore constructor onsuccess opened IndexedDB');
@@ -88,7 +77,7 @@ class DbTaskGroup {
 }
 
 class DbTask {
-    public pk?: number;
+    public pk?: number;   // leave undefined so autoIncrement can generate the key
     public taskGroupId?: number;
     public title?: string;
 }
