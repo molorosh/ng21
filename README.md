@@ -1,7 +1,33 @@
 # ng21
 A small webapp to learn angular v21 and to see how angular's features work with development concepts like Clean Architecture and Domain-Driven Design.
 
+## phases
+### phase 1
+using folder-based separation I will create a very simple application (a todo list of sorts) that adheres to design patterns like:
+- Clean Architecture
+- Domain Driven Design
+
+This phase will use a folder structure of
+```
+src
+  \app
+    \ddd         - base DDD entities
+    \domain      - entities, aggregates, value-types, & events
+    \persistence - saving the data locally (IndexedDB)
+    \ux          - the presentation layer 
+```
+to impose separation on the various parts.
+
+_I may further separate out shared / base aspects of the persistence and ux layers too._
+
+### phase 2
+once a reasonable design is established in phase 1 I will turn each part into its own npm package and simple install and combine them
+
+### phase 3
+add additional features to the app - but this time in the npm packages.
+
 ## basic setup
+
 ### installation
 To create an angular web-app with a specific version of angular installed locally I did the following:
 
