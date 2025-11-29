@@ -2,6 +2,6 @@
 enum ValidityStatus {
     Info = 'Info',
     Warning = 'Warning',
-    NotValid = 'NotValid'
+    Error = 'Error'
 }
 export { ValidityStatus };

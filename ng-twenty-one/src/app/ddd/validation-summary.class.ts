@@ -16,5 +16,9 @@ class ValidationSummary {
     getMessages(): ValidityMessage[] {
         return this.messages;
     }
+
+    addMessage(message: ValidityMessage): void {
+        this.messages.push(message);
+    }
 }
 export { ValidationSummary };
