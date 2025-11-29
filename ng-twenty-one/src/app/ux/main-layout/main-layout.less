@@ -1,0 +1,56 @@
+@import '../../app.less';
+
+h1.app-title {
+  font-family: @font-family-logo;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  background: -webkit-linear-gradient(#e47419, #e47419, hsl(155, 89%, 26%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.main-layout {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  background-color: @background-color;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.primary-section {
+    flex: 2;
+    width: 100%;
+    padding: 1rem;
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+}
+
+.secondary-section {
+    flex: 1;
+    width: 100%;
+    padding: 7rem 1rem 1rem 1rem;
+    align-items: flex-start;
+}
+
+@media screen and (max-width: 600px) {
+  
+  .main-layout {
+    padding: 1rem;
+    flex-direction: column;
+  }
+  
+  .primary-section {
+    padding: 1rem;
+  }   
+  
+  .secondary-section {
+    padding: 1rem;
+  } 
+
+}
