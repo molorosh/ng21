@@ -12,7 +12,7 @@ This phase will use a folder structure of
 src
   \app
     \ddd         - base DDD entities
-    \domain      - entities, aggregates, value-types, & events
+    \domain      - entities, aggregates, value-types, events, & validations
     \persistence - saving the data locally (IndexedDB)
     \ux          - the presentation layer 
 ```
@@ -79,3 +79,32 @@ _TODO: replace this manual stuff with some GitHub actions at some point..._
   - size: 110
   - background: #8800Ff
   - foreground: #ffffff
+
+  ## (Agile) Work List
+
+  ### To Do
+
+  - create the basic validations for TaskGroup:
+    - error: the name must not be null/empty/whitespace only
+    - error: the name cannot be the same as another TaskGroup (so must be able to check the persisted storage)
+    - error: the name (when whitespace trimmed) must be longer than 3 characters and less than 100 characters
+    - warning: the name SHOULD contain at least one space within the name (as single words are not as useful as phrases)
+
+  - implement the creation/validation/persistence/retrieval of TasKGroup in the UX
+    - when you press the Save button and there are no validation messages it will just save
+    - when there are only warnings then you also get the save with warnings button that allows you to persist it
+    - when there are errors then either save or save-with-warnings are not permitted
+  
+  note: this does rather suggest a SaveTaskGroupWithWarningsCommand  / SaveTaskGroupCommand
+  or a SaveTaskGroup(model: TaskGroupModel, withWarnings: bool = false) that will return a CommandResult that could contain either
+  - A ValidationResult model
+  - A ApplicationError model
+  - A CommandSuccess model (that contains the updated entity)
+
+  so maybe a disciminated union type of thing?
+
+  - tidy up the very dreadful and basic UX
+
+  - 
+
+  ## Done
