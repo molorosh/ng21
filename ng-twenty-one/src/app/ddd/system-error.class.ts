@@ -1,4 +1,5 @@
 class SystemError {
+    readonly isSystemError: boolean = true;
     protected code: number;
     protected message: string;
 

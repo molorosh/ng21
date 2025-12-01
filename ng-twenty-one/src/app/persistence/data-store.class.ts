@@ -7,7 +7,11 @@ class DataStore {
     constructor(idbf: IDBFactory, name: string) {   
         this.idbIDBFactory = idbf;
         this.name = name;
-
+        if(!this.idbIDBFactory) {
+            // added to make tests pass in environments without IndexedDB
+            // TODO: implement a mock IndexedDB for such environments
+            return;
+        }
         // this would normally be done in a request.onupgradeneeded = (event: IDBVersionChangeEvent) => { ... } handler
         var request: IDBOpenDBRequest = this.idbIDBFactory.open(this.name, this.dbVersion);
         request.onupgradeneeded = (event: IDBVersionChangeEvent) => {

@@ -1,6 +1,7 @@
 import { ValidityMessage } from "./validity-message.class";
 
 class ValidationSummary {
+    readonly isSystemError: boolean = false;
     protected success: boolean;
     protected messages: ValidityMessage[] = [];
 

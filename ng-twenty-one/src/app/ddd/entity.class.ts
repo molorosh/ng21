@@ -8,5 +8,12 @@ class Entity {
         this.id = id;
         this.status = status;
     }
+
+    public getId(): number {
+        return this.id;
+    }
+    public getStatus(): EntityStatus {
+        return this.status;
+    }
 }
 export { Entity };

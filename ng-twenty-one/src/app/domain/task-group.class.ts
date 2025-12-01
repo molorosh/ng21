@@ -19,6 +19,15 @@ class TaskGroup extends AggregateRoot {
         this.endingBeforeUtc = endingBeforeUtc;
     }
 
+    /// <summary>
+    /// I've put the validation logic here for simplicity, but I might also want to separate it 
+    /// into its own service class if it gets more complex.  It feels like there could be a lot of
+    /// utility to having a base validation class that other entities can extend from...?
+    /// Note that I am following Martin Fowler's advice to have validations be specific to a purpose:
+    /// e.g ValidateForPersistence, ValidateForShoppingCart, ValidateForGuestAccess, etc.
+    /// It might also be useful if the validation methods also took a locale (e.g. en-US, fr-FR) to
+    /// allow for localized validation messages.
+    /// </summary>
     static async validateForPersistence(entity: TaskGroup, repository: TaskGroupRepository, allowWarnings: boolean = false): Promise<OperationSummary> {
         let validationSummary: ValidationSummary = new ValidationSummary(false);
         let existingEntities = await repository.getAll();
