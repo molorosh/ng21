@@ -1,12 +1,23 @@
+import { inject, Injectable } from "@angular/core";
+import { DataStoreConfig } from "./data-store-config.service";
+// it's absoutely fine for the database layer to know about the domain models - just not the other way around!
+import { TaskGroup } from "../domain/task-group.class";
+import { EntityStatus } from "../ddd/entity-status.enum";
+
+@Injectable({providedIn: 'root'})
 class DataStore {
     
     private idbIDBFactory: IDBFactory;
     private name: string;
     private dbVersion: number = 1;
+    private dataStoreConfig = inject(DataStoreConfig);
 
-    constructor(idbf: IDBFactory, name: string) {   
-        this.idbIDBFactory = idbf;
-        this.name = name;
+    // keep a reference to the opened database
+    private db?: IDBDatabase;
+
+    constructor() {
+        this.idbIDBFactory = window.indexedDB;
+        this.name = this.dataStoreConfig.dbName;
         if(!this.idbIDBFactory) {
             // added to make tests pass in environments without IndexedDB
             // TODO: implement a mock IndexedDB for such environments
@@ -63,13 +74,44 @@ class DataStore {
         }
         request.onsuccess = (event: Event) => {
             console.log('DataStore constructor onsuccess opened IndexedDB');
-            let db: IDBDatabase = request.result;
+            this.db = request.result;
         }
         request.onerror = (event: Event) => {
             console.error('DataStore constructor error opening IndexedDB:', request.error);
         }
     }
 
+     private getObjectStore(name: "task-groups" | "tasks", mode: "readonly" | "readwrite"): IDBObjectStore {
+        if (!this.idbIDBFactory) {
+            throw new Error('IndexedDB is not available in this environment.');
+        }
+        if (!this.db) {
+            // The DB may not have been opened yet; throw so callers can handle it
+            // or choose to return an empty value. We prefer throwing so issues are obvious.
+            throw new Error('IndexedDB database not opened yet. Wait for constructor to complete (request.onsuccess).');
+        }
+        const tx = this.db.transaction(name, mode);
+        return tx.objectStore(name);
+    }
+
+    public async getAllTaskGroups(): Promise<TaskGroup[]> {
+        // If IndexedDB isn't available or the DB hasn't opened yet, return an empty array.
+        if (!this.idbIDBFactory || !this.db) {
+            return [];
+        }
+        try {
+            const store = this.getObjectStore("task-groups", "readonly");
+            const req: IDBRequest = store.getAll();
+            const results = await new Promise<any[]>((resolve, reject) => {
+                req.onsuccess = () => resolve(req.result as any[]);
+                req.onerror = () => reject(req.error ?? new Error('Unknown IDB error'));
+            });
+            return results.map(r => new TaskGroup(r?.pk, EntityStatus.Saved, r?.title));
+        } catch (err) {
+            console.error('DataStore.getAllTaskGroups failed:', err);
+            return [];
+        }
+    }
 }
 
 // I don't want to couple my domain classes to IndexedDB implementation details

@@ -1,3 +1,4 @@
 <p>my-work works!</p>
 <p>pk: <input type="number" [value]="thePk()" (input)="thePk.set($event.target.valueAsNumber)" /> <button>fetch task group</button></p>
-<p>title: <input type="text" [value]="theTitle()" (input)="theTitle.set($event.target.value)" /> <button>new task group</button></p>
+<p>title: <input type="text" [value]="theTitle()" (input)="theTitle.set($event.target.value)" /> <button (click)="create()">new task group</button></p>
+<p><button (click)="getAll()">get all</button></p>

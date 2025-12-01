@@ -1,6 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { DataStore } from './persistence/data-store.class';
+import { Component, signal, inject } from '@angular/core';
 import { MainLayout } from "./ux/main-layout/main-layout";
+import { DataStoreConfig } from './persistence/data-store-config.service';
 
 @Component({
   selector: 'app-root',
@@ -10,11 +10,11 @@ import { MainLayout } from "./ux/main-layout/main-layout";
 })
 export class App {
   protected readonly title = signal('ng-twenty-one');
-  protected dataStore: DataStore;
+  dataStoreConfig: DataStoreConfig = inject(DataStoreConfig);
 
   constructor() {
     console.log('App component constructed');
-    this.dataStore = new DataStore(window.indexedDB, 'ng-twenty-one');
+    this.dataStoreConfig.dbName = 'ng-twenty-one';
   }
 
 }
