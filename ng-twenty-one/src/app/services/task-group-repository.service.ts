@@ -1,7 +1,8 @@
-import {Injectable, signal, inject } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { TaskGroupRepository } from '../domain/task-group-repository.interface';
 import { TaskGroup } from '../domain/task-group.class';
 import { DataStore } from '../persistence/data-store.class';
+import { OperationSummary } from '../ddd/operation-summary.class';
 
 @Injectable({providedIn: 'root'})
 export class TaskGroupRepositoryService implements TaskGroupRepository {
@@ -13,10 +14,30 @@ export class TaskGroupRepositoryService implements TaskGroupRepository {
         console.log('TaskGroupRepositoryService instantiated at', this.createdTime());
     }
 
-    async add(entity: TaskGroup): Promise<number> {
+    async add(entity: TaskGroup): Promise<OperationSummary> {
         console.log('Adding entity', entity);
-        let result = TaskGroup.validateForPersistence(entity, this, false);
-        return Promise.resolve(123);
+        try {
+            const os = await TaskGroup.validateForPersistence(entity, this, false);
+            // handle system error or validation summary consistently
+            if (os.result.resultType === "SystemError") {
+                return os;
+            }
+            if (os.result.resultType === "ValidationSummary") {
+                if (os.result.messages.length === 0) {
+                    // no validation messages -> persist and return the success summary
+                    await this.dataStore.persistTaskGroup(entity);
+                    return os;
+                } else {
+                    // validation messages present -> return the validation summary
+                    return os;
+                }
+            }
+            // fallback - return a generic error summary
+            return OperationSummary.CreateAsError();
+        } catch (err) {
+            // validation threw or something else failed
+            return OperationSummary.CreateAsError();
+        }
     }
 
     async fetchById(id: number): Promise<TaskGroup | null> {
@@ -29,8 +50,8 @@ export class TaskGroupRepositoryService implements TaskGroupRepository {
         return this.dataStore.getAllTaskGroups();
     }
 
-    async save(entity: TaskGroup): Promise<void> {
-        console.log('Saving entity', entity);
-        return Promise.resolve();
+    async save(entity: TaskGroup): Promise<OperationSummary> {
+        console.log('Adding entity', entity);
+        return TaskGroup.validateForPersistence(entity, this, false);
     }
 }

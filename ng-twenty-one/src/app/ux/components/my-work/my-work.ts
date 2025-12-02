@@ -19,7 +19,9 @@ export class MyWork {
   public create(): void {
     console.log(" create clicked ");
     let tg: TaskGroup = new TaskGroup(-1, EntityStatus.Created, this.theTitle());
-    this.repo.add(tg);
+    this.repo.add(tg).then(opSum => {
+      console.log("opSum", opSum);
+    });
   }
 
   public getAll(): void {

@@ -3,6 +3,8 @@ import { DataStoreConfig } from "./data-store-config.service";
 // it's absoutely fine for the database layer to know about the domain models - just not the other way around!
 import { TaskGroup } from "../domain/task-group.class";
 import { EntityStatus } from "../ddd/entity-status.enum";
+import { OperationSummary } from "../ddd/operation-summary.class";
+import { OperationSummaryResult } from "../ddd/operation-summary-result.type";
 
 @Injectable({providedIn: 'root'})
 class DataStore {
@@ -110,6 +112,29 @@ class DataStore {
         } catch (err) {
             console.error('DataStore.getAllTaskGroups failed:', err);
             return [];
+        }
+    }
+
+    public async persistTaskGroup(entity: TaskGroup): Promise<OperationSummary>{
+        // If IndexedDB isn't available or the DB hasn't opened yet, return an empty array.
+        if (!this.idbIDBFactory || !this.db) {
+            return OperationSummary.CreateAsError();
+        }
+        try {
+            const store = this.getObjectStore("task-groups", "readwrite");
+            if(entity.getId() < 0){
+                let objeckt = new DbTaskGroup();
+                objeckt.title = entity.title ?? undefined;
+                delete (objeckt as any).pk; // ensure pk is undefined so that autoIncrement works
+                let key = store.add(objeckt);
+                return OperationSummary.CreateAsError();
+            }else{
+                console.log("UPDATES NOT SUPPORTED YET!");
+                return OperationSummary.CreateAsError();
+            }
+        } catch (err) {
+            console.error('DataStore.getAllTaskGroups failed:', err);
+            return OperationSummary.CreateAsError();
         }
     }
 }

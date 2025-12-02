@@ -1,7 +1,7 @@
 import { TaskGroup } from "./task-group.class";
 import { EntityStatus } from "../ddd/entity-status.enum";
-import { ValidationSummary } from "../ddd/validation-summary.class";
 import { ValidityStatus } from "../ddd/validity-status.enum";
+import { OperationSummary } from "../ddd/operation-summary.class";
 
 describe('TaskGroup', () => {
     
@@ -15,10 +15,10 @@ describe('TaskGroup', () => {
             return Promise.resolve([tgTheTitle, tgAnotherTitle]);
         });
         save = vi.fn(async (entity: TaskGroup) => {
-            return Promise.resolve();
+            return OperationSummary.CreateAsError();
         });
         add = vi.fn(async (entity: TaskGroup) => {
-            return Promise.resolve(3); // return a new pk
+            return OperationSummary.CreateAsError();
         });
         fetchById = vi.fn(async (id: number) => {   
             if(id === tgTheTitle.getId()) {
@@ -41,19 +41,18 @@ describe('TaskGroup', () => {
 
         var result = TaskGroup.validateForPersistence(tgValidationCandidate, new MockRepo(), false);
         result.then(opSummary => {
-            let summary = opSummary.getResult();
-            switch(summary.isSystemError) {
-                case false:
-                    let validationSummary = summary as ValidationSummary;
-                    expect(validationSummary.getMessages().length).toBeGreaterThan(0);
-                    let hasDuplicateTitleError = validationSummary.getMessages().some(msg => 
+            let summary = opSummary.result;
+            switch(summary.resultType) {
+                case "ValidationSummary":
+                    expect(summary.messages.length).toBeGreaterThan(0);
+                    let hasDuplicateTitleError = summary.messages.some(msg => 
                         msg.getMember() === 'Title' 
                         && msg.getStatus() === ValidityStatus.Error 
                         && ((msg.getMessage()?.indexOf('Title must be unique (case insensitive).') ?? -1) >= 0)
                     );
                     expect(hasDuplicateTitleError).toBe(true);
                     break;
-                case true:      
+                case "SystemError":      
                     throw new Error('Expected validation to complete without system error.');
                     break;  
             }

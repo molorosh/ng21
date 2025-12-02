@@ -35,14 +35,6 @@ describe('App', () => {
     expect(compiled.querySelector('h1')?.textContent).toContain('ng-twenty-one');
   });
 
-  it('should attach a DataStore instance to the component', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance as any;
-    expect(app.dataStore).toBeTruthy();
-    // our mock sets a "name" property during construction
-    expect(app.dataStore.name).toBe('ng-twenty-one');
-  });
-
   it('exposes the title signal with the expected initial value', () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance as any;

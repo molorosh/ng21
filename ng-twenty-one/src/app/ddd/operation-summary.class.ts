@@ -1,15 +1,26 @@
-import { SystemError } from "./system-error.class"
-import { ValidationSummary } from "./validation-summary.class"
+import { OperationSummaryResult } from "./operation-summary-result.type";
 
 class OperationSummary {
-    protected result: SystemError | ValidationSummary
+    public result: OperationSummaryResult
     
-    constructor(result: SystemError | ValidationSummary) {        
+    constructor(result: OperationSummaryResult) {        
         this.result = result;
     }
-    
-    getResult(): SystemError | ValidationSummary {
-        return this.result;
+
+    public static CreateAsError(): OperationSummary
+    {
+        let res: OperationSummaryResult = {
+            locale: "",
+            identifier: "",
+            resultType: "SystemError",
+            errorCode: 234,
+            errorMessage: "???"
+        }
+        let os: OperationSummary = {
+            result: res
+        }
+        return os
     }
+    
 }
 export { OperationSummary };
