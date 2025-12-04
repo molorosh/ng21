@@ -5,5 +5,6 @@ interface Repository<T> {
     fetchById(id: number): Promise<T | null>; 
     getAll(): Promise<T[]>;
     save(entity: T): Promise<OperationSummary>;
+    isAwake(): boolean;
 }
 export type { Repository };

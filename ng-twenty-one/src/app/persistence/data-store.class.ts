@@ -17,6 +17,12 @@ class DataStore {
     // keep a reference to the opened database
     private db?: IDBDatabase;
 
+    private isAwake: boolean = false;
+
+    public isAwakened(): boolean {
+        return this.isAwake;
+    }
+
     constructor() {
         this.idbIDBFactory = window.indexedDB;
         this.name = this.dataStoreConfig.dbName;
@@ -50,7 +56,6 @@ class DataStore {
             );
             taskStore.createIndex("title", "title", { unique: false });
             
-
             // just for now create some things in the object storelet groupA: DbTaskGroup = new DbTaskGroup();
             
             let groupA: DbTaskGroup = new DbTaskGroup();
@@ -76,6 +81,7 @@ class DataStore {
         }
         request.onsuccess = (event: Event) => {
             console.log('DataStore constructor onsuccess opened IndexedDB');
+            this.isAwake = true;
             this.db = request.result;
         }
         request.onerror = (event: Event) => {

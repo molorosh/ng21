@@ -1,8 +1,9 @@
 <p>my-work works!</p>
 <p>pk: <input type="number" [value]="thePk()" (input)="thePk.set($event.target.valueAsNumber)" /> <button>fetch task group</button></p>
 <p>title: <input type="text" [value]="theTitle()" (input)="theTitle.set($event.target.value)" /> <button (click)="create()">new task group</button></p>
-<p><button (click)="getAll()">get all</button></p>
+<p><button matButton="elevated" (click)="getAll()">get all</button></p>
 
+<p><button matButton="elevated" (click)="openDialog()">New Task Group…</button></p>
 <h2>TaskGroups:</h2>
 @for (theGroup of theGroups(); track theGroup.getId()) {
 <div>id:{{ theGroup.getId() }} title:{{ theGroup.title }}</div>

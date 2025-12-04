@@ -47,6 +47,7 @@ export class TaskGroupRepositoryService implements TaskGroupRepository {
 
     async getAll(): Promise<TaskGroup[]> {
         console.log('Getting all entities');
+        console.log("this.dataStore:", this.dataStore);
         return this.dataStore.getAllTaskGroups();
     }
 
@@ -54,4 +55,9 @@ export class TaskGroupRepositoryService implements TaskGroupRepository {
         console.log('Adding entity', entity);
         return TaskGroup.validateForPersistence(entity, this, false);
     }
+
+    isAwake(): boolean {
+        return this.dataStore.isAwakened();    
+    }
+
 }
